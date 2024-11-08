@@ -1,1 +1,117 @@
-Hello World!
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Threat Interface</title>
+    <style>
+        /* Basic reset and styling */
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            background-color: #121212;
+            color: white;
+        }
+
+        /* Error Notification Box Style */
+        .error-notification {
+            position: absolute;
+            width: 200px;
+            padding: 10px;
+            border: 1px solid #f44336;
+            background-color: #ffcccc;
+            color: #b71c1c;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+            animation: fadeIn 0.5s ease forwards;
+            opacity: 0;
+            border-radius: 5px;
+        }
+
+        /* Fade in animation for notifications */
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Text styling */
+        .error-notification h4 {
+            margin: 0;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .error-notification p {
+            margin: 5px 0 0;
+            font-size: 14px;
+        }
+        .notification-container img {
+            background-position: cover;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Container for error notifications -->
+    <div id="notification-container">
+        <img src="image/red.jpg">
+    </div>
+
+    <script>
+        // Array of multiple error messages
+        const errorMessages = [
+            "System Failure Detected!",
+            "Unauthorized Access Attempt!",
+            "Critical Error: Unable to Connect to Server!",
+            "Data Corruption Detected!",
+            "Security Breach Alert!",
+            "Unexpected Shutdown Imminent!",
+            "Virus Detected in System Files!",
+            "Memory Overload Warning!",
+            "Disk Space Critically Low!",
+            "Unrecognized Activity Detected!",
+            "Configuration Error: Please Check Settings!",
+            "Server Unresponsive - Reboot Required!"
+        ];
+
+        // Function to create a new error notification
+        function createErrorNotification() {
+            // Create the notification element
+            const notification = document.createElement('div');
+            notification.className = 'error-notification';
+
+            // Select a random error message
+            const randomMessage = errorMessages[Math.floor(Math.random() * errorMessages.length)];
+
+            // Set the content of the notification
+            notification.innerHTML = `
+                <h4>Error Alert</h4>
+                <p>${randomMessage}</p>
+            `;
+
+            // Randomize the position of the notification
+            notification.style.top = `${Math.random() * (window.innerHeight - 100)}px`;
+            notification.style.left = `${Math.random() * (window.innerWidth - 200)}px`;
+
+            // Add the notification to the container
+            document.getElementById('notification-container').appendChild(notification);
+
+            // Auto-remove notification after a while
+            setTimeout(() => {
+                notification.remove();
+            }, 5000);
+        }
+
+        // Continuously create error notifications at intervals
+        setInterval(createErrorNotification, 500);
+
+    </script>
+
+</body>
+</html>
