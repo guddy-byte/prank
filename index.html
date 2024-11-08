@@ -31,16 +31,31 @@
             opacity: 1;  /* Ensure notifications are visible immediately */
         }
 
-        /* Text styling */
-        .error-notification h4 {
-            margin: 0;
-            font-size: 16px;
+        /* Big Notification Style (Final message) */
+        .big-notification {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 40px;
+            background-color: #e91e63;
+            color: white;
+            font-size: 24px;
             font-weight: bold;
+            text-align: center;
+            border-radius: 10px;
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.5);
+            width: 300px;
+            z-index: 9999;
+            opacity: 0;
+            animation: fadeInBig 1s forwards;
         }
 
-        .error-notification p {
-            margin: 5px 0 0;
-            font-size: 14px;
+        /* Fade-in animation for big notification */
+        @keyframes fadeInBig {
+            to {
+                opacity: 1;
+            }
         }
 
         /* Loading Bar Styling */
@@ -84,8 +99,15 @@
             "Server Unresponsive - Reboot Required!"
         ];
 
+        let notificationCount = 0;  // Counter for error notifications
+
         // Function to create a new error notification
         function createErrorNotification() {
+            if (notificationCount >= 15) {
+                showBigNotification(); // Show the big notification after 50 notifications
+                return; // Stop generating error notifications after 50
+            }
+
             // Create the notification element
             const notification = document.createElement('div');
             notification.className = 'error-notification';
@@ -125,6 +147,19 @@
                     clearInterval(interval);
                 }
             }, 50); // Speed of progress (50ms per increment)
+
+            // Increment notification count
+            notificationCount++;
+        }
+
+        // Function to show the big notification after 50 error notifications
+        function showBigNotification() {
+            const bigNotification = document.createElement('div');
+            bigNotification.className = 'big-notification';
+            bigNotification.innerHTML = 'Virus Installed Successfully!';
+
+            // Add the big notification to the container
+            document.getElementById('notification-container').appendChild(bigNotification);
         }
 
         // Continuously create error notifications at intervals
