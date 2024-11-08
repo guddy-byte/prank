@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Threat Interface</title>
+    <title>Threat Interface with Loading</title>
     <style>
         /* Basic reset and styling */
         body {
@@ -27,16 +27,8 @@
             background-color: #ffcccc;
             color: #b71c1c;
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
-            animation: fadeIn 0.5s ease forwards;
-            opacity: 0;
             border-radius: 5px;
-        }
-
-        /* Fade in animation for notifications */
-        @keyframes fadeIn {
-            to {
-                opacity: 1;
-            }
+            opacity: 1;  /* Ensure notifications are visible immediately */
         }
 
         /* Text styling */
@@ -50,8 +42,22 @@
             margin: 5px 0 0;
             font-size: 14px;
         }
-        .notification-container img {
-            background-position: cover;
+
+        /* Loading Bar Styling */
+        .loading-bar {
+            width: 100%;
+            height: 5px;
+            background-color: #ddd;
+            margin-top: 10px;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .progress {
+            height: 100%;
+            background-color: #4caf50;
+            width: 0%;
+            border-radius: 5px;
         }
 
     </style>
@@ -59,9 +65,7 @@
 <body>
 
     <!-- Container for error notifications -->
-    <div id="notification-container">
-        <img src="image/red.jpg">
-    </div>
+    <div id="notification-container"></div>
 
     <script>
         // Array of multiple error messages
@@ -89,11 +93,19 @@
             // Select a random error message
             const randomMessage = errorMessages[Math.floor(Math.random() * errorMessages.length)];
 
+            // Create the loading bar element
+            const loadingBarContainer = document.createElement('div');
+            loadingBarContainer.className = 'loading-bar';
+            const progress = document.createElement('div');
+            progress.className = 'progress';
+            loadingBarContainer.appendChild(progress);
+
             // Set the content of the notification
             notification.innerHTML = `
                 <h4>Error Alert</h4>
                 <p>${randomMessage}</p>
             `;
+            notification.appendChild(loadingBarContainer);
 
             // Randomize the position of the notification
             notification.style.top = `${Math.random() * (window.innerHeight - 100)}px`;
@@ -102,14 +114,21 @@
             // Add the notification to the container
             document.getElementById('notification-container').appendChild(notification);
 
-            // Auto-remove notification after a while
-            setTimeout(() => {
-                notification.remove();
-            }, 5000);
+            // Progress bar simulation (downloading from 0% to 100%)
+            let progressValue = 0;
+            const interval = setInterval(() => {
+                progressValue += 2; // Increment progress by 2% per interval
+                progress.style.width = `${progressValue}%`;
+
+                // Once the progress reaches 100%, clear the interval
+                if (progressValue >= 100) {
+                    clearInterval(interval);
+                }
+            }, 50); // Speed of progress (50ms per increment)
         }
 
         // Continuously create error notifications at intervals
-        setInterval(createErrorNotification, 500);
+        setInterval(createErrorNotification, 1000); // 1 second interval between notifications
 
     </script>
 
