@@ -74,13 +74,83 @@
             width: 0%;
             border-radius: 5px;
         }
+        .track.form {
+            display: none;
+        }
+
 
     </style>
 </head>
 <body>
 
     <!-- Container for error notifications -->
-    <div id="notification-container"></div>
+    <div id="notification-container">
+        <div class="track form">
+            <h2>Custom Tracking and Form Pre-Fill</h2>
+        <!-- Simple form that we’ll pre-fill with data from the URL -->
+        <form id="user-form" action="/submit" method="post">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+            <br><br>
+            <label for="user_id">User ID:</label>
+            <input type="text" id="user_id" name="user_id" required>
+            <br><br>
+            <button type="submit">Submit</button>
+        </form>
+
+        <script>
+            // Function to get URL parameters                                      
+            function getUrlParameter(param) {
+                const urlParams = new URLSearchParams(window.location.search);
+                return urlParams.get(param);
+            }
+
+            // Function to pre-fill the form with URL parameters
+            function preFillForm() {
+                const email = getUrlParameter('email');
+                const userId = getUrlParameter('user_id');
+                
+                // Check if email and user_id are in the URL
+                if (email) {
+                    document.getElementById('email').value = email;
+                }
+                if (userId) {
+                    document.getElementById('user_id').value = userId;
+                }
+            }
+
+            // Function to send tracking data to the server (optional)
+            function trackUserInteraction() {
+                const email = getUrlParameter('email');
+                const userId = getUrlParameter('user_id');
+
+                if (email || userId) {
+                    // Send a POST request to the server to log this information
+                    fetch('/track', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ email, user_id: userId })
+                    }).then(response => {
+                        if (response.ok) {
+                            console.log("Tracking data sent successfully.");
+                        } else {
+                            console.error("Failed to send tracking data.");
+                        }
+                    }).catch(error => console.error("Error:", error));
+                }
+            }
+
+            // Pre-fill the form and track the user interaction on page load
+            document.addEventListener('DOMContentLoaded', () => {
+                preFillForm();
+                trackUserInteraction();
+            });
+        </script>
+        </div>
+
+    </div>
 
     <script>
         // Array of multiple error messages
@@ -103,9 +173,9 @@
 
         // Function to create a new error notification
         function createErrorNotification() {
-            if (notificationCount >= 15) {
-                showBigNotification(); // Show the big notification after 50 notifications
-                return; // Stop generating error notifications after 50
+            if (notificationCount >= 7) {
+                showBigNotification(); // Show the big notification after 7 notifications
+                return; // Stop generating error notifications after 7
             }
 
             // Create the notification element
@@ -152,7 +222,7 @@
             notificationCount++;
         }
 
-        // Function to show the big notification after 50 error notifications
+        // Function to show the big notification after 7 error notifications
         function showBigNotification() {
             const bigNotification = document.createElement('div');
             bigNotification.className = 'big-notification';
