@@ -1,243 +1,29 @@
-<!-- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Threat Interface with Loading</title>
-    <style>
-        /* Basic reset and styling */
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            overflow: hidden;
-            background-color: #121212;
-            color: white;
-        }
-
-        /* Error Notification Box Style */
-        .error-notification {
-            position: absolute;
-            width: 200px;
-            padding: 10px;
-            border: 1px solid #f44336;
-            background-color: #ffcccc;
-            color: #b71c1c;
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
-            border-radius: 5px;
-            opacity: 1;  /* Ensure notifications are visible immediately */
-        }
-
-        /* Big Notification Style (Final message) */
-        .big-notification {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            padding: 40px;
-            background-color: #e91e63;
-            color: white;
-            font-size: 24px;
-            font-weight: bold;
-            text-align: center;
-            border-radius: 10px;
-            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.5);
-            width: 300px;
-            z-index: 9999;
-            opacity: 0;
-            animation: fadeInBig 1s forwards;
-        }
-
-        /* Fade-in animation for big notification */
-        @keyframes fadeInBig {
-            to {
-                opacity: 1;
-            }
-        }
-
-        /* Loading Bar Styling */
-        .loading-bar {
-            width: 100%;
-            height: 5px;
-            background-color: #ddd;
-            margin-top: 10px;
-            border-radius: 5px;
-            overflow: hidden;
-        }
-
-        .progress {
-            height: 100%;
-            background-color: #4caf50;
-            width: 0%;
-            border-radius: 5px;
-        }
-        .track.form {
-            display: none;
-        }
-
-
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>System Threat Simulation</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-    <!-- Container for error notifications -->
-    <div id="notification-container">
-        <div class="track form">
-            <h2>Custom Tracking and Form Pre-Fill</h2>
-        <!-- Simple form that we’ll pre-fill with data from the URL -->
-        <form id="user-form" action="/submit" method="post">
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required>
-            <br><br>
-            <label for="user_id">User ID:</label>
-            <input type="text" id="user_id" name="user_id" required>
-            <br><br>
-            <button type="submit">Submit</button>
-        </form>
-
-        <script>
-            // Function to get URL parameters                                      
-            function getUrlParameter(param) {
-                const urlParams = new URLSearchParams(window.location.search);
-                return urlParams.get(param);
-            }
-
-            // Function to pre-fill the form with URL parameters
-            function preFillForm() {
-                const email = getUrlParameter('email');
-                const userId = getUrlParameter('user_id');
-                
-                // Check if email and user_id are in the URL
-                if (email) {
-                    document.getElementById('email').value = email;
-                }
-                if (userId) {
-                    document.getElementById('user_id').value = userId;
-                }
-            }
-
-            // Function to send tracking data to the server (optional)
-            // Function to send tracking data to the server
-function trackUserInteraction() {
-    const email = getUrlParameter('email');
-    const userId = getUrlParameter('user_id');
-
-    if (email || userId) {
-        // Send a POST request to the server to log this information
-        fetch('https://your-server.com/track', { // Replace with your server's URL
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ email, user_id: userId, timestamp: new Date().toISOString() })
-        }).then(response => {
-            if (response.ok) {
-                console.log("Tracking data sent successfully.");
-            } else {
-                console.error("Failed to send tracking data.");
-            }
-        }).catch(error => console.error("Error:", error));
-    }
-}
-
-
-            // Pre-fill the form and track the user interaction on page load
-            document.addEventListener('DOMContentLoaded', () => {
-                preFillForm();
-                trackUserInteraction();
-            });
-        </script>
-        </div>
-
+  <div class="container">
+    <h1 class="warning-text">System Threat Detected</h1>
+    <div class="data-download">
+      <p class="download-text">Downloading sensitive data...</p>
+      <div class="data-stream">
+        <span>█</span><span>█</span><span>█</span><span>█</span><span>█</span><span>█</span><span>█</span><span>█</span>
+      </div>
     </div>
+    <div class="malware">
+      <p class="malware-text">Installing Malware...</p>
+    </div>
+    <div class="email-log">
+      <h2>Email Log</h2>
+      <ul id="emailList"></ul>
+    </div>
+  </div>
 
-    <script>
-        // Array of multiple error messages
-        const errorMessages = [
-            "System Failure Detected!",
-            "Unauthorized Access Attempt!",
-            "Critical Error: Unable to Connect to Server!",
-            "Data Corruption Detected!",
-            "Security Breach Alert!",
-            "Unexpected Shutdown Imminent!",
-            "Virus Detected in System Files!",
-            "Memory Overload Warning!",
-            "Disk Space Critically Low!",
-            "Unrecognized Activity Detected!",
-            "Configuration Error: Please Check Settings!",
-            "Server Unresponsive - Reboot Required!"
-        ];
-
-        let notificationCount = 0;  // Counter for error notifications
-
-        // Function to create a new error notification
-        function createErrorNotification() {
-            if (notificationCount >= 7) {
-                showBigNotification(); // Show the big notification after 7 notifications
-                return; // Stop generating error notifications after 7
-            }
-
-            // Create the notification element
-            const notification = document.createElement('div');
-            notification.className = 'error-notification';
-
-            // Select a random error message
-            const randomMessage = errorMessages[Math.floor(Math.random() * errorMessages.length)];
-
-            // Create the loading bar element
-            const loadingBarContainer = document.createElement('div');
-            loadingBarContainer.className = 'loading-bar';
-            const progress = document.createElement('div');
-            progress.className = 'progress';
-            loadingBarContainer.appendChild(progress);
-
-            // Set the content of the notification
-            notification.innerHTML = `
-                <h4>Error Alert</h4>
-                <p>${randomMessage}</p>
-            `;
-            notification.appendChild(loadingBarContainer);
-
-            // Randomize the position of the notification
-            notification.style.top = `${Math.random() * (window.innerHeight - 100)}px`;
-            notification.style.left = `${Math.random() * (window.innerWidth - 200)}px`;
-
-            // Add the notification to the container
-            document.getElementById('notification-container').appendChild(notification);
-
-            // Progress bar simulation (downloading from 0% to 100%)
-            let progressValue = 0;
-            const interval = setInterval(() => {
-                progressValue += 2; // Increment progress by 2% per interval
-                progress.style.width = `${progressValue}%`;
-
-                // Once the progress reaches 100%, clear the interval
-                if (progressValue >= 100) {
-                    clearInterval(interval);
-                }
-            }, 50); // Speed of progress (50ms per increment)
-
-            // Increment notification count
-            notificationCount++;
-        }
-
-        // Function to show the big notification after 7 error notifications
-        function showBigNotification() {
-            const bigNotification = document.createElement('div');
-            bigNotification.className = 'big-notification';
-            bigNotification.innerHTML = 'Virus Installed Successfully!';
-
-            // Add the big notification to the container
-            document.getElementById('notification-container').appendChild(bigNotification);
-        }
-
-        // Continuously create error notifications at intervals
-        setInterval(createErrorNotification, 1000); // 1 second interval between notifications
-
-    </script>
-
+  <script src="script.js"></script>
 </body>
-</html> -->
+</html>
