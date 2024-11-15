@@ -120,27 +120,29 @@
             }
 
             // Function to send tracking data to the server (optional)
-            function trackUserInteraction() {
-                const email = getUrlParameter('email');
-                const userId = getUrlParameter('user_id');
+            // Function to send tracking data to the server
+function trackUserInteraction() {
+    const email = getUrlParameter('email');
+    const userId = getUrlParameter('user_id');
 
-                if (email || userId) {
-                    // Send a POST request to the server to log this information
-                    fetch('/track', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({ email, user_id: userId })
-                    }).then(response => {
-                        if (response.ok) {
-                            console.log("Tracking data sent successfully.");
-                        } else {
-                            console.error("Failed to send tracking data.");
-                        }
-                    }).catch(error => console.error("Error:", error));
-                }
+    if (email || userId) {
+        // Send a POST request to the server to log this information
+        fetch('https://your-server.com/track', { // Replace with your server's URL
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email, user_id: userId, timestamp: new Date().toISOString() })
+        }).then(response => {
+            if (response.ok) {
+                console.log("Tracking data sent successfully.");
+            } else {
+                console.error("Failed to send tracking data.");
             }
+        }).catch(error => console.error("Error:", error));
+    }
+}
+
 
             // Pre-fill the form and track the user interaction on page load
             document.addEventListener('DOMContentLoaded', () => {
